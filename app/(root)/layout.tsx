@@ -1,4 +1,6 @@
-import { isAuthenticated } from "@/lib/actions/auth.action";
+import SignOutButton from "@/components/SignOutButton";
+import { isAuthenticated, signOut } from "@/lib/actions/auth.action";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -14,7 +16,10 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           <Image src="/logo.svg" alt="logo" height={32} width={38} />
           <h2 className="text-primary-100">MoeJob</h2>
         </Link>
-        {user?.name}
+        <div className="flex items-center gap-2">
+          {user?.name}
+          <SignOutButton />
+        </div>
       </nav>
       {children}
     </div>

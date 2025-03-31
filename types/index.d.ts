@@ -47,6 +47,7 @@ interface InterviewCardProps {
   techstack: string[];
   createdAt?: string;
   coverImage: string;
+  questions: string[];
 }
 
 interface AgentProps {
@@ -65,6 +66,11 @@ interface RouteParams {
 
 interface GetFeedbackByInterviewIdParams {
   interviewId: string;
+  userId: string;
+}
+
+interface DeleteFeedbackParams {
+  feedbackId: string;
   userId: string;
 }
 

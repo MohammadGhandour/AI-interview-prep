@@ -73,3 +73,8 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user ? user : null;
 };
+
+export async function signOut() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+};
