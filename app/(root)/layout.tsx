@@ -5,15 +5,16 @@ import { redirect } from "next/navigation";
 import { ReactNode } from "react"
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const authenticated = await isAuthenticated();
-  if (!authenticated) redirect("/sign-in");
+  const user = await isAuthenticated();
+  if (!user) redirect("/sign-in");
   return (
     <div className="root-layout">
-      <nav>
+      <nav className="w-full flex justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.svg" alt="logo" height={32} width={38} />
           <h2 className="text-primary-100">MoeJob</h2>
         </Link>
+        {user?.name}
       </nav>
       {children}
     </div>

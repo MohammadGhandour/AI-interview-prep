@@ -21,6 +21,7 @@ export const mappings = {
   mongo: "mongodb",
   mongoose: "mongoose",
   mysql: "mysql",
+  python: "python",
   postgresql: "postgresql",
   sqlite: "sqlite",
   firebase: "firebase",
@@ -215,6 +216,7 @@ export const dummyInterviews: Interview[] = [
     questions: ["What is React?"],
     finalized: false,
     createdAt: "2024-03-15T10:00:00Z",
+    coverImage: ""
   },
   {
     id: "2",
@@ -226,5 +228,6 @@ export const dummyInterviews: Interview[] = [
     questions: ["What is Node.js?"],
     finalized: false,
     createdAt: "2024-03-14T15:30:00Z",
+    coverImage: ""
   },
 ];
