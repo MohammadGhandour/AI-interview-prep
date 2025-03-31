@@ -3,6 +3,21 @@
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
+const SESSION_DURATION = 60 * 60 * 24 * 7;
+
+export async function setSessionCookie(idToken: string) {
+  const cookieStore = await cookies();
+
+  const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn: SESSION_DURATION * 1000 }); // expires in 7 days
+  cookieStore.set("session", sessionCookie, {
+    maxAge: SESSION_DURATION,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    sameSite: "lax"
+  });
+};
+
 export async function signUp(params: SignUpParams) {
   try {
     const { uid, name, email } = params;
@@ -33,23 +48,8 @@ export async function signIn(params: SignInParams) {
   }
 };
 
-export async function setSessionCookie(idToken: string) {
-  const cookieStore = await cookies();
-
-  const ONE_WEEK = 60 * 60 * 24 * 7;
-  const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn: ONE_WEEK * 1000 }); // expires in 7 days
-  cookieStore.set("session", sessionCookie, {
-    maxAge: ONE_WEEK,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    sameSite: "lax"
-  });
-};
-
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
-
   const sessionCookie = cookieStore.get("session")?.value;
 
   if (!sessionCookie) return null;
@@ -57,8 +57,8 @@ export async function getCurrentUser(): Promise<User | null> {
   try {
     const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
     const userRecord = await db.collection("users").doc(decodedClaims.uid).get();
-
     if (!userRecord.exists) return null;
+
     return {
       ...userRecord.data(),
       id: userRecord.id
@@ -71,5 +71,6 @@ export async function getCurrentUser(): Promise<User | null> {
 
 export async function isAuthenticated() {
   const user = await getCurrentUser();
+  console.log(user);
   return !!user;
 };
